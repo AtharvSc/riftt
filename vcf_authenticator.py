@@ -94,7 +94,7 @@ MAX_FILE_SIZE = 5 * 1024 * 1024 # 5MB
 MIN_FILE_SIZE = 1 * 1024 # 1KB
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/legacy-ui", response_class=HTMLResponse)
 async def main():
     content = """
 <!DOCTYPE html>
