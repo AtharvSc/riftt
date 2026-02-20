@@ -32,5 +32,5 @@ COPY --from=frontend-build /app/frontend/dist ./frontend/dist
 # Expose port
 EXPOSE 8000
 
-# Run the application
-CMD ["uvicorn", "vcf_authenticator:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run the application (Shell form to expand $PORT)
+CMD uvicorn vcf_authenticator:app --host 0.0.0.0 --port ${PORT:-8000}
