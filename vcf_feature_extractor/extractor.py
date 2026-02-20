@@ -2,12 +2,7 @@ import re
 import numpy as np
 from typing import List, Dict, Any
 
-try:
-    import joblib
-    ML_AVAILABLE = True
-except ImportError:
-    ML_AVAILABLE = False
-    joblib = None
+import joblib
 
 class VCFFeatureExtractor:
     """
@@ -32,10 +27,6 @@ class VCFFeatureExtractor:
 
     def load_model(self):
         """Loads the pre-trained ensemble model and scaler."""
-        if not ML_AVAILABLE:
-            print("ML dependencies (scikit-learn/joblib) not installed. Skipping ML model load.")
-            return False
-            
         try:
             import os
             model_path = os.path.join(self.model_dir, "ensemble_model.pkl")

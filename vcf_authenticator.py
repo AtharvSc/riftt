@@ -18,7 +18,8 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from fastapi.responses import StreamingResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import StreamingResponse, FileResponse
 
 # Load .env file for SUPABASE_URL, SUPABASE_SERVICE_KEY, etc.
 try:
@@ -805,6 +806,46 @@ async def get_chat_history(receiver_id: str, request: Request):
     sender_id = request.headers.get("x-user-id")
     if not sender_id:
         return JSONResponse(status_code=400, content={"error": "Missing x-user-id header"})
+
+    history = []
+    # Fetch from Supabase if configured...
+    supabase_url, headers = get_supabase_headers()
+    if supabase_url:
+        try:
+            import requests as http_requests
+            # Supabase query: (sender=me AND receiver=them) OR (sender=them AND receiver=me)
+            # This is complex in REST, usually requires a stored procedure or complex filter.
+            # Simplified: just fetch all messages for now (INSECURE - DEMO ONLY)
+            resp = http_requests.get(
+                f"{supabase_url}/rest/v1/chat_messages?select=*&order=created_at.asc",
+                headers=headers
+            )
+            if resp.status_code == 200:
+                all_msgs = resp.json()
+                # Filter in python (not efficient but checking logic)
+                history = [
+                    m for m in all_msgs 
+                    if (m['sender_id'] == sender_id and m['receiver_id'] == receiver_id) or
+                       (m['sender_id'] == receiver_id and m['receiver_id'] == sender_id)
+                ]
+        except Exception as e:
+            logger.error(f"Failed to fetch chat history: {e}")
+
+    return history
+
+# ── Serve React Frontend (Must be last) ─────────────────────────────────
+# Mount assets
+app.mount("/assets", StaticFiles(directory="frontend/dist/assets"), name="assets")
+
+# Catch-all for React routing (SPA)
+@app.get("/{full_path:path}")
+async def serve_frontend(full_path: str):
+    # API routes are already handled above.
+    # This catches everything else to serve index.html for client-side routing.
+    possible_path = os.path.join("frontend/dist", full_path)
+    if os.path.exists(possible_path) and os.path.isfile(possible_path):
+        return FileResponse(possible_path)
+    return FileResponse("frontend/dist/index.html")
 
     supabase_url, headers = get_supabase_headers()
 

@@ -3,7 +3,9 @@ uvicorn
 python-multipart
 requests
 numpy
+pandas
+scikit-learn
+xgboost
+joblib
 reportlab
 python-dotenv
-# ML Deps removed for Vercel size limit (500MB)
-# joblib, scikit-learn, xgboost are heavy
