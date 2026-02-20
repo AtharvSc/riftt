@@ -453,6 +453,10 @@ async def analyze_vcf(
                     drug_name = res["drug"]
                     ml_pred = ml_extractor.predict_risk(vcf_content, drug_name)
                     
+                    if "error" in ml_pred:
+                        logger.warning(f"ML Prediction skipped for {drug_name}: {ml_pred['error']}")
+                        continue
+
                     # Load model metadata for transparency
                     model_metadata = {}
                     try:
@@ -470,7 +474,7 @@ async def analyze_vcf(
                         "ml_model_used": model_metadata.get("model_type", "Ensemble_v1.0_Stochastic"),
                         "model_auc_score": model_metadata.get("ensemble_auc", 0.95),
                         "ml_features": ml_pred["features"],
-                        "medication_alternatives": ml_pred["recommendation"]
+                        "medication_alternatives": ml_pred.get("recommendation")
                     }
             except Exception as ml_err:
                 logger.error(f"ML Processing failed: {ml_err}")

@@ -2,7 +2,8 @@ import re
 import numpy as np
 from typing import List, Dict, Any
 
-import joblib
+try:
+    import joblib
     ML_AVAILABLE = True
 except ImportError:
     ML_AVAILABLE = False
