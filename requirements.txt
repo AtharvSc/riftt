@@ -2,10 +2,8 @@ fastapi
 uvicorn
 python-multipart
 requests
-joblib
 numpy
-scikit-learn
 reportlab
 python-dotenv
-# ML Deps if needed (Vercel has 250MB limit, so be careful)
-xgboost
+# ML Deps removed for Vercel size limit (500MB)
+# joblib, scikit-learn, xgboost are heavy

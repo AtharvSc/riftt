@@ -3,7 +3,10 @@ import numpy as np
 from typing import List, Dict, Any
 
 import joblib
-import numpy as np
+    ML_AVAILABLE = True
+except ImportError:
+    ML_AVAILABLE = False
+    joblib = None
 
 class VCFFeatureExtractor:
     """
@@ -23,9 +26,15 @@ class VCFFeatureExtractor:
         self.model_dir = model_dir
         self.model = None
         self.scaler = None
+        self.scaler_mean = None
+        self.scaler_scale = None
 
     def load_model(self):
         """Loads the pre-trained ensemble model and scaler."""
+        if not ML_AVAILABLE:
+            print("ML dependencies (scikit-learn/joblib) not installed. Skipping ML model load.")
+            return False
+            
         try:
             import os
             model_path = os.path.join(self.model_dir, "ensemble_model.pkl")
