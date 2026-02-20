@@ -37,7 +37,7 @@ interface ResultItem {
 // Sort priority: high (avoid) first, then medium (adjust), then low (safe), then unknown
 const severityOrder: Record<string, number> = { high: 0, medium: 1, low: 2, unknown: 3 };
 
-const getBadgeConfig = (riskLabel: string, severity: string) => {
+const getBadgeConfig = (riskLabel: string) => {
     const label = riskLabel.toLowerCase();
     if (label.includes('safe'))
         return { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-200', icon: ShieldCheck, cardBorder: 'border-l-green-500', cardBg: 'bg-green-50' };
@@ -69,7 +69,7 @@ export const ResultsDisplay: React.FC<{ results: ResultItem[] }> = ({ results })
 const DrugCard: React.FC<{ item: ResultItem }> = ({ item }) => {
     const [open, setOpen] = useState(false);
     const [altOpen, setAltOpen] = useState(false);
-    const config = getBadgeConfig(item.risk_assessment.risk_label, item.risk_assessment.severity);
+    const config = getBadgeConfig(item.risk_assessment.risk_label);
     const Icon = config.icon;
 
     const ml = item.ml_risk_analysis;

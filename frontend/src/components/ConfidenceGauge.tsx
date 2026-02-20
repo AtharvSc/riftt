@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 export const ConfidenceGauge = ({ value = 85 }: { value?: number }) => {
     const radius = 80;
