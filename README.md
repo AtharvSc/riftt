@@ -1,149 +1,180 @@
-# 🧬 PharmaGuard VCF Authenticator
+# PharmaGuard VCF Authenticator 🧬
 
-**Advanced Pharmacogenomic Analysis & Real-Time Risk Assessment Platform**
+**Secure Pharmacogenomic Analysis & Real-Time Risk Assessment Platform**
 
-PharmaGuard is a state-of-the-art pharmacogenomics (PGx) platform designed to bridge the gap between complex genetic data and actionable clinical insights. By analyzing patient VCF files, it predicts drug-gene interactions using a robust **Dual-Engine Approach** that combines established clinical guidelines (CPIC) with cutting-edge Machine Learning models.
+PharmaGuard is a comprehensive pharmacogenomics (PGx) platform designed to analyze patient genetic data (VCF files) and predict drug-gene interactions. It leverages a dual-engine approach combining clinical guidelines (CPIC) with machine learning to provide accurate medication safety assessments.
 
----
+websitel link - http://13.201.6.177:5173/
 
 ## 🚀 Key Features
 
-### 1. 🔬 Advanced Genetic Analysis
--   **VCF Parsing**: Validates and parses standard VCF v4.2 files, checking for essential pharmacogenomic tags (`GENE`, `RS`, `STAR`).
--   **Automated Profiling**: Instantly extracts variants and builds diplotypes for critical pharmacogenes:
-    -   `CYP2D6` (Metabolizer of Codeine, Tamoxifen)
-    -   `CYP2C19` (Clopidogrel, Omeprazole)
-    -   `CYP2C9` (Warfarin, Phenytoin)
-    -   `SLCO1B1` (Statin Transporter)
-    -   `TPMT` & `DPYD` (Chemotherapy Toxicity)
+### 🔬 Advanced Genetic Analysis
+- **VCF File Processing**: Supports standard VCF v4.2 uploads with validation for required pharmacogenomic tags (GENE, RS, STAR).
+- **Automated Profiling**: Extracts key variants, builds diplotypes, and determines phenotypes for critical pharmacogenes:
+  - `CYP2D6` (Codeine, Tamoxifen)
+  - `CYP2C19` (Clopidogrel, Omeprazole)
+  - `CYP2C9` (Warfarin, Phenytoin)
+  - `SLCO1B1` (Simvastatin)
+  - `TPMT` (Thiopurines)
+  - `DPYD` (Fluorouracil)
 
-### 2. 🧠 Dual-Engine Risk Assessment
--   **Rule-Based Clinical Engine**: Implements **CPIC (Clinical Pharmacogenetics Implementation Consortium)** guidelines for deterministic, evidence-based risk profiling.
--   **ML Ensemble Predictor**: A powerful Machine Learning module (using **XGBoost** and **Scikit-Learn**) that analyzes variant density, impact, and pathogenicity to predict risks even when specific guidelines are ambiguous.
+### 🧠 Dual-Engine Risk Assessment
+1. **Rule-Based Clinical Engine**: Implements CPIC guidelines for deterministic, evidence-based risk profiling.
+2. **ML Ensemble Predictor**: Analyzes variant density, impact, and pathogenicity to predict general medication risks with confidence scores.
 
-### 3. 📊 Interactive Dashboard & Reports
--   **Dynamic UI**: Built with **React 19** and **Tailwind CSS** for a premium, responsive experience.
--   **Visual Risk Gauges**: "Traffic Light" system (Green/Yellow/Red) for immediate risk comprehension.
--   **Downloadable Reports**: Generate professional **PDF Metadata Reports** summarizing the analysis for clinical records.
+### 👥 Role-Based Dashboards
+- **Patient Portal**: 
+  - Upload VCF files securely.
+  - View simplified "Traffic Light" risk reports (Green/Yellow/Red).
+  - Access history of previous analyses.
+  - Real-time chat with assigned clinicians.
+- **Doctor Portal**: 
+  - Manage multiple patients.
+  - View detailed genetic breakdowns (Variant details, Star Alleles).
+  - Override or confirm automated risk assessments.
+  - Provide alternative medication recommendations.
 
-### 4. 💬 Real-Time Consultation
--   **Live Chat**: Integrated WebSocket-based chat allows seamless communication between Patients and Doctors.
--   **Secure History**: Chat history is persisted securely in **Supabase**.
+### 💬 Real-Time Consultation
+- Integrated **WebSocket-based Chat** allows immediate communication between patients and doctors to discuss results and medication adjustments.
 
-### 5. 🎙️ Voice-Activated Drug Consultant (ElevenLabs)
--   **Voice Interface**: Patients can consult an AI agent via voice.
--   **Context-Aware**: The agent accesses the patient's genetic profile to give personalized advice on specific drugs.
+### 🎙️ Voice-Activated Drug Consultant (ElevenLabs)
+- **Interactive Voice Agent**: Patients can call an AI-powered agent for real-time consultation.
+- **Seamless Verification**: The agent authenticates the patient via their Patient ID.
+- **Context-Aware Analysis**:  
+  1. Retrieves the patient's existing VCF file.  
+  2. Accepts the drug name provided verbally by the patient.  
+  3. Converts the voice query into actionable data.  
+  4. Runs the validation rules and pharmacogenomic analysis instantly.  
+- **Verbal Guidance**: The AI speaks back to the patient, advising whether the medication is safe or suggesting an alternative based on their genetic profile.
 
-### 6. 🤖 AI-Powered Explanations
--   **Groq LLM Integration**: Generates human-readable, patient-friendly explanations for complex genetic interactions.
--   **Alternative Suggestions**: Automatically suggests safer medication alternatives for high-risk drugs.
+### 🤖 AI-Powered Insights
+- **LLM Explanations**: Generates patient-friendly explanations for complex genetic risks using the Groq API.
+- **Alternative Suggestions**: Automatically suggests safer medication alternatives for high-risk drugs based on the patient's specific genetic profile.
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Backend
--   **Framework**: FastAPI (Python 3.10+)
--   **ML/Data**: Pandas, NumPy, Scikit-Learn, XGBoost, Joblib
--   **Real-time**: WebSockets (Starlette)
--   **PDF Generation**: ReportLab
+- **Framework**: FastAPI (Python)
+- **Data Processing**: Pandas, NumPy
+- **Machine Learning**: Scikit-Learn (Ensemble Models), Joblib
+- **Real-time**: WebSockets
 
 ### Frontend
--   **Framework**: React 19 (Vite)
--   **Language**: TypeScript
--   **Styling**: Tailwind CSS
--   **State/Data**: Axios, Lucide React
+- **Framework**: React 19 (Vite)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **HTTP Client**: Axios
 
 ### Infrastructure
--   **Database**: Supabase (PostgreSQL + RLS)
--   **Deployment**: Render (Docker Containerization)
--   **LLM**: Groq Cloud API
+- **Database & Auth**: Supabase
+- **LLM Integration**: Groq API
 
 ---
 
 ## 📂 Project Structure
 
-```bash
+```
 vcf-authenticator/
-├── Dockerfile                 # Production Docker configuration
-├── vcf_authenticator.py       # Main FastAPI Backend Application
-├── drug_risk_engine.py        # Rule-based CPIC risk logic
-├── diplotype_builder.py       # Star allele construction
-├── vcf_feature_extractor/     # ML Module
-│   ├── extractor.py           # Feature engineering
-│   └── models/                # Pre-trained XGBoost/Ensemble models
-├── frontend/                  # React Application
-│   ├── src/
-│   │   ├── components/        # Dashboards, Charts, Chat UI
-│   │   └── ...
-└── requirements.txt           # Python dependencies
+├── vcf_authenticator.py       # Main Backend Application & API Endpoints
+├── drug_risk_engine.py        # Rule-based risk assessment logic
+├── phenotype_engine.py        # Gene phenotype determination logic
+├── variant_extractor.py       # VCF parsing and variant extraction
+├── diplotype_builder.py       # Star allele diplotype construction
+├── requirements.txt           # Python dependencies
+├── vcf_feature_extractor/     # Machine Learning Module
+│   ├── extractor.py           # Feature extraction for ML models
+│   └── models/                # Serialized model files (.pkl)
+└── frontend/                  # React Frontend Application
+    ├── src/
+    │   ├── pages/             # Dashboard and Public pages
+    │   ├── components/        # Reusable UI components
+    │   ├── lib/               # Utilities
+    └   └── ...
 ```
 
 ---
 
-## ⚡ Getting Started (Local Development)
+## ⚡ Getting Started
+
+### Prerequisites
+- Python 3.9+
+- Node.js 18+
+- Supabase Account
+- Groq API Key
 
 ### 1. Backend Setup
-```bash
-# Clone the repository
-git clone https://github.com/AtharvSc/riftt.git
-cd riftt
 
-# Create virtual environment
+```bash
+# Create a virtual environment
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Configure Environment Variables
-# Create a .env file and add:
-# SUPABASE_URL=...
-# SUPABASE_SERVICE_KEY=...
-# GROQ_API_KEY=...
+# Create .env file
+touch .env
+```
+
+**Add the following to your `.env` file:**
+```env
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_KEY=your_supabase_service_role_key
+GROQ_API_KEY=your_groq_api_key
 ```
 
 **Run the Backend:**
 ```bash
 uvicorn vcf_authenticator:app --reload
 ```
-*API will run at `http://localhost:8000`*
+The API will be available at `http://localhost:8000`.
 
 ### 2. Frontend Setup
+
 ```bash
 cd frontend
+
+# Install dependencies
 npm install
+
+# Start development server
 npm run dev
 ```
-*UI will run at `http://localhost:5173`*
+The Frontend will be available at `http://localhost:5173`.
 
 ---
 
-## 🚀 Deployment (Render)
-
-The project is configured for **Single-Service Docker Deployment** on Render.
-
-1.  **Push to GitHub**.
-2.  Create a **New Web Service** on [Render](https://render.com).
-3.  Connect your repository.
-4.  **Runtime**: Select **Docker** (Critical Step).
-5.  **Environment Variables**: Add your API keys (`GROQ_API_KEY`, `SUPABASE_URL`, etc.).
-6.  **Deploy**.
-
-*The Dockerfile handles building both the React Frontend and Python Backend into a single efficient image.*
-
----
-
-## 📖 API Documentation
+## 📖 API Reference
 
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| `POST` | `/api/analyze` | Main pipeline: VCF Upload -> Validation -> ML/Rule Analysis -> JSON Result |
-| `GET` | `/api/report/download` | Generate and download PDF report of analysis |
-| `WS` | `/ws/chat/{id}` | Real-time WebSocket connection for chat |
-| `POST` | `/api/chat/send` | Send message (persisted to DB) |
-| `GET` | `/legacy-ui` | Access old HTML-only interface |
+| `POST` | `/api/analyze` | upload VCF file and drug list for full analysis |
+| `POST` | `/predict-risk` | Get risk prediction for a specific phenotype profile |
+| `POST` | `/validate-vcf` | Validate VCF file format and contents |
+| `POST` | `/api/chat/send` | Send a chat message (persisted to DB) |
+| `WS` | `/ws/chat/{id}` | WebSocket connection for real-time updates |
 
 ---
 
-*Project developed for the **DeepMind Advanced Coding Assistant Demo**.*
+## 🔒 Security & Privacy
+
+- **Local Validation**: Initial VCF validation happens via streaming to ensure file integrity.
+- **Secure Storage**: Chat messages and user data are stored in Supabase with Row Level Security (RLS).
+- **Anonymization**: The analysis pipeline is designed to process phenotypic data without storing raw genomic files permanently.
+
+---
+
+## 🧪 Testing
+
+To run the backend test suite:
+
+```bash
+python -m pytest
+```
+
+---
+
+*Built for the Future of Personalized Medicine.*
